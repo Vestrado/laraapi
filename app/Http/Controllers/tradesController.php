@@ -91,6 +91,16 @@ class tradesController extends Controller
             // Set the body for accounts
             $body = [
                 'userId' => $id,
+                'openDate' => [
+
+                    'begin' => '2025-01-01 00:00:00'
+                ],
+                'closeDate' => [
+                    'end' => '2025-01-22 23:59:59'
+                ],
+                'ticketType' => [
+                    'buy','sell'
+                ],
                 'orders' => [
                 [
                     'field' => 'closeDate',
