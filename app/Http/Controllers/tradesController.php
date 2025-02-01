@@ -96,11 +96,11 @@ class tradesController extends Controller
                     'begin' => '2025-01-01 00:00:00'
                 ],
                 'closeDate' => [
-                    'end' => '2025-01-22 23:59:59'
+                    'end' => '2025-01-31 23:59:59'
                 ],
-                'ticketType' => [
-                    'buy','sell'
-                ],
+                // 'ticketType' => [
+                //     'buy','sell'
+                // ],
                 'orders' => [
                 [
                     'field' => 'closeDate',
@@ -117,8 +117,9 @@ class tradesController extends Controller
 
             if ($responseAccounts->successful()) {
                 $data = $responseAccounts->json();
+                $totalVolume = collect($data)->sum('volume');
 
-                return view('tradedetails_view', ['data' => $data]);
+                return view('tradedetails_view', ['data' => $data, 'totalVolume' => $totalVolume]);
                 //return view('acc_overview', ['data' => $data, 'accountTypes' => $accountTypes]);
             } else {
                 $error = [

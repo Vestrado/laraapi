@@ -13,7 +13,9 @@
                     @endif
 
                     @if (isset($data) && count($data) > 0)
-                        <h3>Account Overview</h3>
+                        <!-- Display total volume -->
+                        <h4>Total Lots: {{ number_format($totalVolume ?? 0, 2) }}</h4>
+                        <h3>Details:-</h3>
                         <table border="0" width="100%">
                             <thead>
                                 <tr>
@@ -41,6 +43,8 @@
                                 @endforeach
                             </tbody>
                         </table>
+
+
                     @else
                         <p>No user data available.</p>
                     @endif
