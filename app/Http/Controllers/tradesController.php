@@ -91,6 +91,15 @@ class tradesController extends Controller
             // Set the body for accounts
             $body = [
                 'userId' => $id,
+                'orders' => [
+                [
+                    'field' => 'closeDate',
+                    'direction' => 'DESC'
+                ]
+                ],
+                'segment' => [
+                'limit' => 10000
+                ]
             ];
 
             // Send the POST request for accounts
