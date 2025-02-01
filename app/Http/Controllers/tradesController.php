@@ -118,8 +118,13 @@ class tradesController extends Controller
             if ($responseAccounts->successful()) {
                 $data = $responseAccounts->json();
                 $totalVolume = collect($data)->sum('volume');
+                $lastCloseDate = collect($data)->pluck('closeDate')->first();
 
-                return view('tradedetails_view', ['data' => $data, 'totalVolume' => $totalVolume]);
+                return view('tradedetails_view', [
+                    'data' => $data,
+                    'totalVolume' => $totalVolume,
+                    'lastCloseDate' => $lastCloseDate,
+                ]);
                 //return view('acc_overview', ['data' => $data, 'accountTypes' => $accountTypes]);
             } else {
                 $error = [
