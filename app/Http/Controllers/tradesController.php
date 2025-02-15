@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class tradesController extends Controller
 {
@@ -136,6 +137,17 @@ class tradesController extends Controller
         } else {
             return redirect()->route('login')->with('error', 'Session expired. Please log in again.');
         }
+    }
+
+    public function testsave()
+    {
+        $users = DB::table('users')->get();
+
+        // Insert a new user
+        DB::table('users')->insert([
+            'name' => 'Jane Doe',
+            'email' => 'jane@example.com',
+        ]);
     }
 
     public function store(Request $request)

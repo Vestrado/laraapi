@@ -35,4 +35,5 @@ Route::get('/deposit-funds', [fundsController::class, 'paymentlist'])->name('dep
 //Route::get('/trades', [tradesController::class, 'index'])->name('trades.index');
 Route::get('/trades-{id}', [tradesController::class, 'show'])->name('trades.show');
 Route::get('/tradedetails-{id}', [tradesController::class, 'details'])->name('trades.details');
+Route::get('/testsave', [tradesController::class, 'testsave'])->name('testsave');
 
