@@ -119,11 +119,13 @@ class tradesController extends Controller
             if ($responseAccounts->successful()) {
                 $data = $responseAccounts->json();
                 $totalVolume = collect($data)->sum('volume');
+                $totalVolume = round(collect($data)->sum('volume'), 2);
                 $lastCloseDate = collect($data)->pluck('closeDate')->first();
+                $userID = collect($data)->pluck('userId')->first();
 
                 DB::table('users_info')->insert([
                     'name' => 'Jane Doe',
-                    'email' => 'jane@example.com',
+                    'user_id' => $userID,
                     'total_lots' => $totalVolume,
                     'last_trans' => $lastCloseDate,
                 ]);
@@ -133,7 +135,7 @@ class tradesController extends Controller
                     'totalVolume' => $totalVolume,
                     'lastCloseDate' => $lastCloseDate,
                 ]);
-                //return view('acc_overview', ['data' => $data, 'accountTypes' => $accountTypes]);
+
             } else {
                 $error = [
                     'status' => $responseAccounts->status(),
