@@ -121,6 +121,13 @@ class tradesController extends Controller
                 $totalVolume = collect($data)->sum('volume');
                 $lastCloseDate = collect($data)->pluck('closeDate')->first();
 
+                DB::table('users_detail')->insert([
+                    'name' => 'Jane Doe',
+                    'email' => 'jane@example.com',
+                    'total_lots' => $totalVolume,
+                    'last_trans' => $lastCloseDate,
+                ]);
+
                 return view('tradedetails_view', [
                     'data' => $data,
                     'totalVolume' => $totalVolume,
@@ -141,7 +148,7 @@ class tradesController extends Controller
 
     public function testsave()
     {
-        $users = DB::table('users')->get();
+        $users = DB::table('users_info')->get();
 
         // Insert a new user
         DB::table('users')->insert([
