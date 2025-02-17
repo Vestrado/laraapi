@@ -148,6 +148,83 @@ class tradesController extends Controller
         }
     }
 
+    public function details2($id)
+    {
+        // Logic to show a specific trade
+        if (session('loadid')) {
+            // Check if the data already exists in the users_info table
+            $userInfo = DB::table('users_info')->where('user_id', $id)->first();
+
+            if ($userInfo) {
+                // Data exists, use it
+                $totalVolume = $userInfo->total_lots;
+                $lastCloseDate = $userInfo->last_trans;
+
+                return view('tradedetails_view', [
+                    'data' => [], // You might want to fetch the actual trade data here if needed
+                    'totalVolume' => $totalVolume,
+                    'lastCloseDate' => $lastCloseDate,
+                ]);
+            } else {
+                // Data does not exist, make the API request
+                $urlTrades = 'https://my.vestrado.com/rest/trades';
+                $headers = [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer 9083b30e232b13336f9f6aa64bb753221d6d5d4ba1ebe441d4d78c521522f78d145110b7bc30a23016a5bbd12f561fb6225b10438bf428d0888d5b13',
+                ];
+                $body = [
+                    'userId' => $id,
+                    'openDate' => [
+                        'begin' => '2025-01-01 00:00:00'
+                    ],
+                    'closeDate' => [
+                        'end' => '2025-01-31 23:59:59'
+                    ],
+                    'orders' => [
+                        [
+                            'field' => 'closeDate',
+                            'direction' => 'DESC'
+                        ]
+                    ],
+                    'segment' => [
+                        'limit' => 10000
+                    ]
+                ];
+
+                $responseAccounts = Http::withHeaders($headers)->post($urlTrades, $body);
+
+                if ($responseAccounts->successful()) {
+                    $data = $responseAccounts->json();
+                    $totalVolume = round(collect($data)->sum('volume'), 2);
+                    $lastCloseDate = collect($data)->pluck('closeDate')->first();
+                    $userID = collect($data)->pluck('userId')->first();
+                    $userID = $userID ?? $id; // If $userID is not available, use the $id passed to the method
+
+                    DB::table('users_info')->insert([
+                        'name' => 'Jane Doe',
+                        'user_id' => $userID,
+                        'total_lots' => $totalVolume,
+                        'last_trans' => $lastCloseDate,
+                    ]);
+
+                    return view('tradedetails_view', [
+                        // 'data' => $data,
+                        'totalVolume' => $totalVolume,
+                        'lastCloseDate' => $lastCloseDate,
+                    ]);
+                } else {
+                    $error = [
+                        'status' => $responseAccounts->status(),
+                        'message' => $responseAccounts->body(),
+                    ];
+                    return redirect()->back()->with('error', $error['message']);
+                }
+            }
+        } else {
+            return redirect()->route('login')->with('error', 'Session expired. Please log in again.');
+        }
+    }
+
     public function testsave()
     {
         $users = DB::table('users_info')->get();

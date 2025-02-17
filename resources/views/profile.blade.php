@@ -14,6 +14,14 @@
                     @if (isset($data))
                         <table border="0" width="50%">
                             <tr>
+                                <td>Total Lots</td>
+                                <td>: <strong>{{ number_format($totalVolume ?? 0, 2) }}</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Last Trasaction</td>
+                                <td>: <strong>{{ $lastCloseDate ?? 'N/A' }}</strong></td>
+                            </tr>
+                            <tr>
                                 <td>First Name</td>
                                 <td>: <strong>{{ $data['firstName'] }}</strong></td>
                             </tr>
