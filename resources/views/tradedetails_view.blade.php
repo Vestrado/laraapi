@@ -29,6 +29,7 @@
                                     <th>Closed Date</th>
                                     <th>Ticket Type</th>
                                     <th>Volume</th>
+                                    <th>Currency</th>
                                     <th>PL</th>
                                 </tr>
                             </thead>
@@ -41,6 +42,7 @@
                                         <td><strong>{{ $item['closeDate'] ?? 'N/A' }}</strong></td>
                                         <td><strong>{{ $item['ticketType'] ?? 'N/A' }}</strong></td>
                                         <td><strong>{{ $item['volume'] ?? 'N/A' }}</strong></td>
+                                        <td><strong>{{ $item['currency'] ?? 'N/A' }}</strong></td>
                                         <td><strong>{{ $item['pl'] ?? 'N/A' }}</strong></td>
                                         {{-- <td><strong>{{ number_format((float)$item['totalNetDeposits'], 2) ?? 'N/A' }}</strong></td> --}}
                                     </tr>

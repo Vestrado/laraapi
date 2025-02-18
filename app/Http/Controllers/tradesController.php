@@ -180,6 +180,10 @@ class tradesController extends Controller
                     'closeDate' => [
                         'end' => '2025-01-31 23:59:59'
                     ],
+                    'ticketType' => [ // Add the ticketType array here
+                        'buy',
+                        'sell'
+                    ],
                     'orders' => [
                         [
                             'field' => 'closeDate',
@@ -249,6 +253,13 @@ class tradesController extends Controller
                 'closeDate' => [
                     'end' => $todayDate
                 ],
+                'closeDate' => [
+                    'end' => $todayDate
+                ],
+                'ticketType' => [ // Add the ticketType array here
+                    'buy',
+                    'sell'
+                ],
                 'orders' => [
                     [
                         'field' => 'closeDate',
@@ -264,7 +275,18 @@ class tradesController extends Controller
 
             if ($responseAccounts->successful()) {
                 $data = $responseAccounts->json();
-                $totalVolume = round(collect($data)->sum('volume'), 2);
+                // Calculate total volume with special handling for "USC" currency
+                $totalVolume = collect($data)->map(function ($item) {
+                    // If currency is "USC", divide volume by 1000
+                    if ($item['currency'] === 'USC') {
+                        return $item['volume'] / 1000;
+                    }
+                    // Otherwise, return the volume as is
+                    return $item['volume'];
+                })->sum(); // Sum all volumes
+
+                $totalVolume = round($totalVolume, 2); // Round to 2 decimal places
+                //$totalVolume = round(collect($data)->sum('volume'), 2);
                 $lastCloseDate = collect($data)->pluck('closeDate')->first();
                 $userID = collect($data)->pluck('userId')->first();
                 $userID = $userID ?? $id; // If $userID is not available, use the $id passed to the method
