@@ -14,6 +14,7 @@
 
                         <!-- Display total volume -->
                         <h3>Summary</h3>
+                        <h5>Total Lots All: {{ number_format($totalVolumeori ?? 0, 2) }}</h5>
                         <h5>Total Lots: {{ number_format($totalVolume ?? 0, 2) }}</h5>
                         <h5>Last Transaction: {{ $lastCloseDate ?? 'N/A' }}</h5>
                     @if (isset($data) && count($data) > 0)

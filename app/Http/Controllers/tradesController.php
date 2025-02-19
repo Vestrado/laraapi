@@ -286,7 +286,7 @@ class tradesController extends Controller
                 })->sum(); // Sum all volumes
 
                 $totalVolume = round($totalVolume, 2); // Round to 2 decimal places
-                //$totalVolume = round(collect($data)->sum('volume'), 2);
+                $totalVolumeori = round(collect($data)->sum('volume'), 2);
                 $lastCloseDate = collect($data)->pluck('closeDate')->first();
                 $userID = collect($data)->pluck('userId')->first();
                 $userID = $userID ?? $id; // If $userID is not available, use the $id passed to the method
@@ -312,6 +312,7 @@ class tradesController extends Controller
                 return view('tradedetails_view', [
                     'data' => $data, // Uncomment if you want to pass the API data to the view
                     'totalVolume' => $totalVolume,
+                    'totalVolumeori' => $totalVolumeori,
                     'lastCloseDate' => $lastCloseDate,
                 ]);
             } else {
